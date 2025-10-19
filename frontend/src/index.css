@@ -1,0 +1,670 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Swiper Custom Styles */
+.movie-swiper {
+  padding: 0 !important; /* No padding needed since buttons are in corner */
+  overflow: visible !important;
+  margin: 0 !important;
+}
+
+.movie-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+.movie-swiper .swiper-slide {
+  width: auto !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: stretch !important;
+  flex-shrink: 0 !important;
+}
+
+.movie-swiper .swiper-slide > div {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+/* Ensure seamless loop */
+.movie-swiper .swiper-slide-duplicate {
+  opacity: 1 !important;
+}
+
+/* Custom navigation buttons - Elegant Design */
+.swiper-button-prev-custom,
+.swiper-button-next-custom {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    rgba(255, 255, 255, 0.05) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Elegant hover effects */
+.swiper-button-prev-custom:hover,
+.swiper-button-next-custom:hover {
+  background: linear-gradient(135deg, 
+    var(--primary) 0%, 
+    color-mix(in srgb, var(--primary) 85%, #000) 100%) !important;
+  color: var(--primary-foreground) !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 
+    0 16px 48px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Active state with elegant feedback */
+.swiper-button-prev-custom:active,
+.swiper-button-next-custom:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Shimmer effect for premium feel */
+.swiper-button-prev-custom::before,
+.swiper-button-next-custom::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(
+    90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  ) !important;
+  transition: left 0.6s ease !important;
+  z-index: 1 !important;
+}
+
+.swiper-button-prev-custom:hover::before,
+.swiper-button-next-custom:hover::before {
+  left: 100% !important;
+}
+
+/* Icon styling with subtle glow */
+.swiper-button-prev-custom svg,
+.swiper-button-next-custom svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) !important;
+  transition: all 0.3s ease !important;
+  z-index: 2 !important;
+  position: relative !important;
+}
+
+.swiper-button-prev-custom:hover svg,
+.swiper-button-next-custom:hover svg {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Dark mode enhancements */
+.dark .swiper-button-prev-custom,
+.dark .swiper-button-next-custom {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.08) 0%, 
+    rgba(255, 255, 255, 0.02) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .swiper-button-prev-custom:hover,
+.dark .swiper-button-next-custom:hover {
+  background: linear-gradient(135deg, 
+    var(--primary) 0%, 
+    color-mix(in srgb, var(--primary) 90%, #fff) 100%) !important;
+  box-shadow: 
+    0 16px 48px rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Focus states for accessibility */
+.swiper-button-prev-custom:focus-visible,
+.swiper-button-next-custom:focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 2px var(--primary) !important;
+}
+
+/* Ensure buttons are always visible and properly positioned */
+.swiper-button-prev-custom,
+.swiper-button-next-custom {
+  pointer-events: auto !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+/* Container adjustments for better button positioning */
+.movie-swiper {
+  position: relative !important;
+}
+
+/* Ensure the swiper container allows for button overflow */
+.movie-swiper .swiper-wrapper {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Hide default navigation */
+.movie-swiper .swiper-button-next,
+.movie-swiper .swiper-button-prev {
+  display: none !important;
+}
+
+/* Top-right corner button adjustments */
+.swiper-button-prev-custom,
+.swiper-button-next-custom {
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  margin: 0 !important;
+}
+
+/* Corner button container styling */
+.movie-swiper .absolute.top-0.right-0 {
+  padding: 8px !important;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 100%) !important;
+  backdrop-filter: blur(12px) saturate(150%) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Dark mode corner container */
+.dark .movie-swiper .absolute.top-0.right-0 {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.02) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Responsive adjustments for corner buttons */
+@media (max-width: 640px) {
+  .movie-swiper {
+    padding: 0 !important;
+  }
+  
+  .swiper-button-prev-custom,
+  .swiper-button-next-custom {
+    backdrop-filter: blur(16px) saturate(160%) !important;
+  }
+  
+  .swiper-button-prev-custom:hover,
+  .swiper-button-next-custom:hover {
+    transform: translateY(-1px) scale(1.03) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-swiper {
+    padding: 0 !important;
+  }
+  
+  .swiper-button-prev-custom,
+  .swiper-button-next-custom {
+    backdrop-filter: blur(14px) saturate(140%) !important;
+  }
+}
+
+/* Large screens - enhanced elegance for corner buttons */
+@media (min-width: 1024px) {
+  .swiper-button-prev-custom,
+  .swiper-button-next-custom {
+    backdrop-filter: blur(24px) saturate(200%) !important;
+  }
+  
+  .swiper-button-prev-custom:hover,
+  .swiper-button-next-custom:hover {
+    transform: translateY(-2px) scale(1.05) !important;
+  }
+}
+
+/* Smooth transitions */
+.movie-swiper .swiper-slide {
+  transition: transform 0.3s ease !important;
+}
+
+.movie-swiper .swiper-slide:hover {
+  transform: translateY(-4px) !important;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.65rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.645 0.246 16.439);
+  --primary-foreground: oklch(0.969 0.015 12.422);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.645 0.246 16.439);
+  --sidebar-primary-foreground: oklch(0.969 0.015 12.422);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.645 0.246 16.439);
+}
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.645 0.246 16.439);
+  --primary-foreground: oklch(0.969 0.015 12.422);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.645 0.246 16.439);
+  --sidebar-primary-foreground: oklch(0.969 0.015 12.422);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.645 0.246 16.439);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* SearchBar specific styles to prevent blocking */
+[data-search-input] {
+  pointer-events: auto;
+}
+
+[data-search-dropdown] {
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+/* UploadButton theme fixes */
+[data-ut-element="button"] {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 border border-primary/20;
+}
+
+[data-ut-element="button"]:disabled {
+  @apply bg-muted text-muted-foreground cursor-not-allowed;
+}
+
+/* UploadButton loading state */
+[data-ut-element="button"][data-state="uploading"] {
+  @apply bg-primary/80 text-primary-foreground;
+}
+
+/* UploadButton text visibility */
+[data-ut-element="button"] span,
+[data-ut-element="button"] div {
+  @apply text-primary-foreground;
+}
+
+/* Ensure loading spinner is visible */
+[data-ut-element="button"] svg {
+  @apply text-primary-foreground;
+}
+
+/* UploadButton in light theme specific fixes */
+:root [data-ut-element="button"] {
+  @apply text-white;
+}
+
+:root [data-ut-element="button"] span,
+:root [data-ut-element="button"] div {
+  @apply text-white;
+}
+
+:root [data-ut-element="button"] svg {
+  @apply text-white;
+}
+
+/* Hero Banner animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ken-burns-subtle {
+  0% {
+    transform: scale(1) translateX(0px) translateY(0px);
+  }
+  25% {
+    transform: scale(1.02) translateX(-1px) translateY(-0.5px);
+  }
+  50% {
+    transform: scale(1.01) translateX(1px) translateY(-1px);
+  }
+  75% {
+    transform: scale(1.015) translateX(-0.5px) translateY(0.5px);
+  }
+  100% {
+    transform: scale(1) translateX(0px) translateY(0px);
+  }
+}
+
+@keyframes gentle-glow {
+  0%, 100% {
+    filter: brightness(1) contrast(1);
+  }
+  50% {
+    filter: brightness(1.05) contrast(1.02);
+  }
+}
+
+@keyframes zoomInOut {
+  0%, 100% {
+    transform: scale(1.05);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-ken-burns-subtle {
+  animation: ken-burns-subtle 15s ease-in-out infinite, gentle-glow 8s ease-in-out infinite;
+}
+
+/* Review Detail Dialog Styling */
+.review-detail-dialog {
+  @apply bg-background border border-border;
+}
+
+.review-detail-dialog .dialog-content {
+  @apply bg-card text-card-foreground;
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Review Detail Header */
+.review-detail-header {
+  @apply border-b border-border pb-4 mb-4;
+  background: linear-gradient(135deg, 
+    rgba(var(--primary-rgb, 255, 255, 255), 0.05) 0%, 
+    rgba(var(--primary-rgb, 255, 255, 255), 0.02) 100%);
+}
+
+.review-detail-avatar {
+  @apply border-2 border-border shadow-lg;
+  background: linear-gradient(135deg, 
+    rgba(var(--primary-rgb, 255, 255, 255), 0.1) 0%, 
+    rgba(var(--primary-rgb, 255, 255, 255), 0.05) 100%);
+}
+
+/* Review Content Styling */
+.review-content-section {
+  @apply bg-muted/30 border border-border/50 rounded-lg p-4;
+  backdrop-filter: blur(10px) saturate(150%);
+}
+
+.review-rating-display {
+  @apply flex items-center gap-1;
+}
+
+.review-rating-star {
+  @apply text-yellow-400 drop-shadow-sm;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* Report Section Styling */
+.review-report-section {
+  @apply bg-destructive/10 border border-destructive/20 rounded-lg p-4;
+  backdrop-filter: blur(12px) saturate(160%);
+  background: linear-gradient(135deg, 
+    rgba(var(--destructive-rgb, 239, 68, 68), 0.08) 0%, 
+    rgba(var(--destructive-rgb, 239, 68, 68), 0.04) 100%);
+}
+
+.review-report-header {
+  @apply flex items-center gap-2 text-destructive;
+}
+
+.review-report-icon {
+  @apply text-destructive drop-shadow-sm;
+  filter: drop-shadow(0 1px 2px rgba(var(--destructive-rgb, 239, 68, 68), 0.3));
+}
+
+.report-reason-box {
+  @apply bg-background/60 border border-border/30 rounded-md p-3 mt-2;
+  backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.report-reporter-box {
+  @apply bg-background/50 border border-border/20 rounded-md p-3 mb-2;
+  backdrop-filter: blur(6px) saturate(110%);
+  transition: all 0.2s ease;
+}
+
+.report-reporter-box:hover {
+  @apply bg-background/70 border-border/40;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.report-reporter-info {
+  @apply flex flex-col space-y-1;
+}
+
+.report-reporter-name {
+  @apply font-medium text-foreground;
+}
+
+.report-reporter-date {
+  @apply text-xs text-muted-foreground;
+}
+
+.report-reporter-reason {
+  @apply text-sm text-foreground mt-2 leading-relaxed;
+}
+
+/* Dark mode specific adjustments */
+.dark .review-detail-dialog .dialog-content {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.03) 0%, 
+    rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.dark .review-detail-header {
+  background: linear-gradient(135deg, 
+    rgba(var(--primary-rgb, 255, 255, 255), 0.08) 0%, 
+    rgba(var(--primary-rgb, 255, 255, 255), 0.03) 100%);
+}
+
+.dark .review-content-section {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark .review-report-section {
+  background: linear-gradient(135deg, 
+    rgba(var(--destructive-rgb, 239, 68, 68), 0.12) 0%, 
+    rgba(var(--destructive-rgb, 239, 68, 68), 0.06) 100%);
+  border: 1px solid rgba(var(--destructive-rgb, 239, 68, 68), 0.2);
+}
+
+.dark .report-reason-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .report-reporter-box {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark .report-reporter-box:hover {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation for report sections */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.report-reason-box,
+.report-reporter-box {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+/* Enhanced typography for review content */
+.review-comment-text {
+  @apply text-foreground leading-relaxed;
+  line-height: 1.6;
+}
+
+.review-movie-title {
+  @apply font-semibold text-foreground;
+}
+
+.review-user-info {
+  @apply text-foreground;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .review-detail-dialog .dialog-content {
+    backdrop-filter: blur(16px) saturate(150%);
+  }
+  
+  .review-content-section,
+  .review-report-section {
+    backdrop-filter: blur(8px) saturate(120%);
+  }
+  
+  .report-reason-box,
+  .report-reporter-box {
+    backdrop-filter: blur(4px) saturate(110%);
+  }
+}
+

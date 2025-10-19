@@ -1,0 +1,322 @@
+import { useFavorites } from "@/hooks/use-favorites";
+import { useGenres } from "@/hooks/use-genres";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Heart, AlertCircle, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import MediaCard from "@/components/media-card";
+import { MovieFilters } from "@/components/shared";
+import { useState, useMemo } from "react";
+import { cn } from "@/lib/utils";
+import Loader from "@/components/kokonutui/loader";
+
+export default function FavoritesPage() {
+  // Pagination and filter states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedGenre, setSelectedGenre] = useState("all");
+  const [selectedYear, setSelectedYear] = useState("all");
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [viewMode, setViewMode] = useState("grid");
+  
+  const itemsPerPage = 24; // Same as AllMovies for consistency
+
+  // Build query parameters for server-side filtering and pagination
+  const queryParams = useMemo(() => {
+    const params = {
+      page: currentPage,
+      limit: itemsPerPage,
+      sortBy,
+      sortOrder,
+    };
+
+    if (selectedGenre && selectedGenre !== "all") {
+      params.genre = selectedGenre;
+    }
+    if (selectedYear && selectedYear !== "all") {
+      params.year = selectedYear;
+    }
+
+    // Debug logging
+    console.log("Query params being sent:", params);
+    console.log("Selected genre:", selectedGenre);
+    console.log("Selected year:", selectedYear);
+
+    return params;
+  }, [currentPage, selectedGenre, selectedYear, sortBy, sortOrder, itemsPerPage]);
+
+  // Fetch favorites with pagination and filtering
+  const { data: favoritesData, isLoading, isError, refetch } = useFavorites(queryParams);
+  
+  const favorites = favoritesData?.data || [];
+  const pagination = favoritesData?.pagination || {};
+  const totalPages = Math.ceil((pagination.total || 0) / itemsPerPage);
+
+  // Check if user has any favorites at all (for showing filters)
+  const { data: allFavoritesData } = useFavorites({ page: 1, limit: 1 });
+  const hasAnyFavorites = (allFavoritesData?.pagination?.total || 0) > 0;
+
+  // Fetch genres for filter dropdown
+  const { data: genresData } = useGenres({ limit: 100 });
+  const availableGenres = genresData?.genres || [];
+
+  // Debug logging
+  console.log("Favorites component - favoritesData:", favoritesData);
+  console.log("Favorites component - favorites:", favorites);
+  console.log("Favorites component - pagination:", pagination);
+  console.log("Favorites component - hasAnyFavorites:", hasAnyFavorites);
+  console.log("Favorites component - isLoading:", isLoading);
+  console.log("Favorites component - isError:", isError);
+
+  // Generate year options (last 30 years like AllMovies)
+  const yearOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 30 }, (_, i) => currentYear - i);
+  }, []);
+
+  // Filter handlers
+  const handleGenreChange = (value) => {
+    setSelectedGenre(value);
+    setCurrentPage(1); // Reset to first page when filter changes
+  };
+
+  const handleYearChange = (value) => {
+    setSelectedYear(value);
+    setCurrentPage(1); // Reset to first page when filter changes
+  };
+
+  const handleSortChange = (value) => {
+    const [field, order] = value.split("-");
+    setSortBy(field);
+    setSortOrder(order);
+    setCurrentPage(1); // Reset to first page when sort changes
+  };
+
+  const clearFilters = () => {
+    setSelectedGenre("all");
+    setSelectedYear("all");
+    setSortBy("createdAt");
+    setSortOrder("desc");
+    setCurrentPage(1); // Reset to first page when clearing filters
+  };
+
+  const goToPage = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (isLoading && currentPage === 1) {
+    return (
+      <Loader 
+        title="Loading Favorites"
+        subtitle="Please wait while we fetch your favorite movies"
+        size="lg"
+        fullScreen={true}
+      />
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="relative min-h-screen bg-background overflow-hidden pt-20">
+        {/* Background Glow Effects */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-chart-1/10 to-chart-2/10 opacity-50"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-chart-2/5 rounded-full blur-3xl"></div>
+        
+        <div className="relative z-10 container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <p className="text-destructive mb-4">Error loading favorites</p>
+              <Button onClick={() => refetch()}>
+                Try Again
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative min-h-screen bg-background pt-20">
+      {/* Background Layer (boleh overflow-hidden) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-chart-1/10 to-chart-2/10 opacity-50"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-chart-2/5 rounded-full blur-3xl"></div>
+      </div>
+  
+      {/* Content Layer */}
+      <div className="relative z-10 container mx-auto px-4 py-8 pb-16 overflow-visible">
+        {/* Header */}
+        <div className="mb-8 animate-in fade-in-0 slide-in-from-top-4 duration-700">
+          <h1 className="text-4xl font-bold text-foreground mb-2">
+            My Favorites
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            {pagination.total === 0 
+              ? "You haven't added any movies to your favorites yet."
+              : `Discover and explore your favorite movies`
+            }
+          </p>
+          {pagination.total > 0 && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Showing {favorites.length} of {pagination.total} favorite movies
+            </p>
+          )}
+        </div>
+
+        {/* Filters */}
+        {hasAnyFavorites && (
+          <div className="mb-8 animate-in fade-in-0 slide-in-from-top-4 duration-700 delay-150">
+            <MovieFilters
+              selectedGenre={selectedGenre}
+              selectedYear={selectedYear}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              viewMode={viewMode}
+              onGenreChange={handleGenreChange}
+              onYearChange={handleYearChange}
+              onSortChange={handleSortChange}
+              onViewModeChange={setViewMode}
+              onClearFilters={clearFilters}
+              customGenres={availableGenres}
+              customYears={yearOptions}
+            />
+          </div>
+        )}
+
+        {/* Loading Overlay for pagination */}
+        {isLoading && currentPage > 1 && (
+          <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-30 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        )}
+
+        {/* Empty state */}
+        {pagination.total === 0 && !isLoading && selectedGenre === "all" && selectedYear === "all" ? (
+          <div className="flex items-center justify-center h-64 animate-in fade-in-0 slide-in-from-top-4 duration-700">
+            <div className="text-center">
+              <div className="w-20 h-20 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-6 animate-in fade-in-0 scale-in-75 duration-700 delay-200">
+                <Heart className="h-12 w-12 text-muted-foreground" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground mb-2 animate-in fade-in-0 slide-in-from-top-4 duration-700 delay-300">No Favorites Yet</h2>
+              <p className="text-muted-foreground mb-6 animate-in fade-in-0 slide-in-from-top-4 duration-700 delay-400">
+                Start adding movies to your favorites by clicking the heart icon on any movie card.
+              </p>
+              <div className="animate-in fade-in-0 slide-in-from-top-4 duration-700 delay-500">
+                <Link to="/">
+                  <Button>Browse Movies</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {favorites.length === 0 && !isLoading ? (
+              <div className="flex items-center justify-center h-64 animate-in fade-in-0 slide-in-from-top-4 duration-700">
+                <div className="text-center">
+                  <p className="text-muted-foreground mb-4">No movies found matching your filters</p>
+                  <Button onClick={clearFilters}>Clear Filters</Button>
+                </div>
+              </div>
+            ) : (
+              <div className={cn(
+                "animate-in fade-in-0 slide-in-from-bottom-4 duration-700 delay-300",
+                viewMode === "grid" 
+                  ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6"
+                  : "space-y-4"
+              )}>
+                {favorites.map((movie, index) => (
+                  <div
+                    key={movie._id}
+                    className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500"
+                    style={{
+                      animationDelay: `${300 + (index * 50)}ms`,
+                      animationFillMode: 'both'
+                    }}
+                  >
+                    <MediaCard
+                      movieId={movie._id}
+                      posterSrc={movie.poster}
+                      title={movie.title}
+                      year={movie.year}
+                      rating={movie.averageRating || movie.rating || "N/A"}
+                      onTrailer={() => movie.trailer ? window.open(movie.trailer, "_blank") : null}
+                      className={cn(
+                        "w-full max-w-[160px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[180px] mx-auto transition-transform hover:scale-105",
+                        viewMode === "list" && "max-w-none h-auto"
+                      )}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center mt-12 space-x-2 animate-in fade-in-0 slide-in-from-bottom-4 duration-700 delay-500">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1 || isLoading}
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+
+            {/* Page Numbers */}
+            <div className="flex items-center space-x-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => goToPage(pageNum)}
+                    disabled={isLoading}
+                    className="w-10"
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages || isLoading}
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+
+        {/* Pagination Info */}
+        {totalPages > 1 && (
+          <div className="text-center mt-4 text-sm text-muted-foreground animate-in fade-in-0 slide-in-from-bottom-4 duration-700 delay-700">
+            Page {currentPage} of {totalPages} • {pagination.total} total favorites
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
