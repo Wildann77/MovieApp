@@ -1,3 +1,4 @@
+// src/app.js
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -7,7 +8,7 @@ import path from 'path';
 import { connectDB } from './lib/mongoDB.js';
 import { errorHandler } from './utils/response.js';
 
-// Routes
+// ROUTES
 import authRoutes from './routers/auth.route.js';
 import movieRoutes from './routers/movie.route.js';
 import masterDataRoutes from './routers/master-data.route.js';
@@ -16,15 +17,9 @@ import uploadRoutes from './routers/upload.route.js';
 import reviewRoutes from './routers/review.route.js';
 import adminRoutes from './routers/admin.route.js';
 
-// Load env for both local and serverless usage
+// Env
 dotenv.config();
-if (process.env.NODE_ENV) {
-  const envPath = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`);
-  dotenv.config({ path: envPath, override: true });
-}
-
-// Ensure DB connected once (cached in connectDB)
-await connectDB();
+await connectDB(); // ✅ Vercel akan reuse connection
 
 const app = express();
 
@@ -37,12 +32,16 @@ app.use(cors({
   credentials: true,
 }));
 
-// Health check
+// ✅ health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'OK',
+    message: 'Backend berjalan',
+    timestamp: new Date().toISOString(),
+  });
 });
 
-// API routes
+// ROUTES
 app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
 app.use('/api/master-data', masterDataRoutes);
@@ -51,17 +50,12 @@ app.use('/api', uploadRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Root handler (useful for Vercel root path)
+// ROOT
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'Backend is up', health: '/api/health' });
 });
 
-// 404
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
-});
-
-// Error handler
+// ERROR HANDLER
 app.use(errorHandler);
 
-export default app;
+export default app; // ✅ Wajib
