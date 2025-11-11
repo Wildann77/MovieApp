@@ -51,6 +51,11 @@ app.use('/api', uploadRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Root handler (useful for Vercel root path)
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'Backend is up', health: '/api/health' });
+});
+
 // 404
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
