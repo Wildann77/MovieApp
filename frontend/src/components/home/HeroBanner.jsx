@@ -125,7 +125,7 @@ export default function HeroBanner() {
   }
 
   return (
-    <section className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[65vh] w-full overflow-hidden">
+    <section className="relative h-[75vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] w-full overflow-hidden">
       {/* Dynamic Background Image with Zoom Animation */}
       <div className="absolute inset-0">
         {/* Fallback background for loading/error states */}
@@ -155,8 +155,9 @@ export default function HeroBanner() {
       </div>
       
       {/* Enhanced Gradient Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent transition-opacity duration-500 sm:hidden" />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent transition-opacity duration-500" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-transparent transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-transparent transition-opacity duration-500 hidden sm:block" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80 transition-opacity duration-500" />
       
       {/* Seamless Bottom Transition - Extended untuk menghilangkan gap */}
@@ -180,7 +181,7 @@ export default function HeroBanner() {
       )}
       
       {/* Content */}
-      <div className="relative z-10 h-full flex items-end">
+      <div className="relative z-10 h-full flex items-end pb-2 sm:pb-6 md:pb-8">
         <div ref={contentRef} className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-3xl w-full">
           {/* Movie Badge */}
           <div className={`flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 transition-all duration-300 ease-out transform ${
@@ -250,7 +251,7 @@ export default function HeroBanner() {
           }`}>
             <Button 
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/25 border border-primary/20 group touch-manipulation"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/25 border border-primary/20 group touch-manipulation w-full sm:w-auto"
             >
               <Play className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1.5 sm:mr-2 transition-transform duration-300 group-hover:scale-110" />
               Watch Now
@@ -258,7 +259,7 @@ export default function HeroBanner() {
             <Button 
               variant="outline" 
               size="lg"
-              className="text-foreground border-border/60 bg-background/80 backdrop-blur-sm px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:bg-accent hover:text-accent-foreground hover:shadow-2xl shadow-lg group touch-manipulation"
+              className="text-foreground border-border/60 bg-background/80 backdrop-blur-sm px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 hover:bg-accent hover:text-accent-foreground hover:shadow-2xl shadow-lg group touch-manipulation w-full sm:w-auto"
               asChild
             >
               <Link to={`/movies/${currentMovie._id}`}>

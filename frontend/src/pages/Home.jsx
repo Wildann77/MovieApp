@@ -1,4 +1,4 @@
-import HeroBanner from "@/components/home/HeroBanner";
+ import HeroBanner from "@/components/home/HeroBanner";
 import MovieSlider from "@/components/movies/MovieSlider";
 import TopCastFeaturesCompact from "@/components/movies/TopCastFeaturesCompact";
 import { motion } from "framer-motion";
