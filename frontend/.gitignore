@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Env files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+
+# Vercel / build artifacts
+.vercel/
+
+# Caches
+.eslintcache
+.cache/
+coverage/
