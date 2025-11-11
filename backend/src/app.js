@@ -28,7 +28,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://movie-app-nu-green.vercel.app/',
+  origin: process.env.CLIENT_URL || 'https://movie-app-nu-green.vercel.app',
   credentials: true,
 }));
 
