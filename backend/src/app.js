@@ -27,10 +27,25 @@ const app = express();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://movie-app-nu-green.vercel.app',
-  credentials: true,
-}));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://movie-app-nu-green.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log("❌ CORS blocked: ", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 
 // ✅ health check
 app.get('/api/health', (req, res) => {
