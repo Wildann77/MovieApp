@@ -24,18 +24,18 @@ export const adminService = {
 
     // Build filter object
     const filter = {};
-    
+
     if (search) {
       filter.$or = [
         { username: { $regex: search, $options: 'i' } },
         { email: { $regex: search, $options: 'i' } }
       ];
     }
-    
+
     if (role) {
       filter.role = role;
     }
-    
+
     if (status && status !== '') {
       filter.isActive = status === 'active';
     }
@@ -54,7 +54,7 @@ export const adminService = {
     const totalUsers = await User.countDocuments();
     const activeUsers = await User.countDocuments({ isActive: true });
     const adminUsers = await User.countDocuments({ role: 'admin' });
-    
+
     // Get new users this month
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -142,7 +142,7 @@ export const adminService = {
 
     // Delete user's reviews first
     await Review.deleteMany({ user: userId });
-    
+
     // Delete user's movies
     await Movie.deleteMany({ user: userId });
 
@@ -166,22 +166,22 @@ export const adminService = {
 
     // Build filter object
     const filter = {};
-    
+
     if (search) {
       filter.$or = [
         { title: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } }
       ];
     }
-    
+
     if (year) {
       filter.year = parseInt(year);
     }
-    
+
     if (genre) {
       filter.genres = new mongoose.Types.ObjectId(genre);
     }
-    
+
     if (director) {
       filter.director = new mongoose.Types.ObjectId(director);
     }
@@ -203,7 +203,7 @@ export const adminService = {
     // Get statistics
     const totalMovies = await Movie.countDocuments();
     const totalReviews = await Review.countDocuments();
-    
+
     // Get new movies this month
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -239,7 +239,7 @@ export const adminService = {
   updateAnyMovie: async (movieId, updateData) => {
     // Import movie service functions
     const { movieService } = await import('./movie.service.js');
-    
+
     // Use the existing movie update logic but bypass ownership check
     const movie = await Movie.findById(movieId);
     if (!movie) {
@@ -303,7 +303,7 @@ export const adminService = {
   createAnyMovie: async (movieData, adminUserId) => {
     // Import movie service functions
     const { movieService } = await import('./movie.service.js');
-    
+
     // Use the existing movie creation logic but with admin user
     const createdMovie = await movieService.createMovie(movieData, adminUserId);
     return createdMovie;
@@ -315,7 +315,7 @@ export const adminService = {
   deleteAnyMovie: async (movieId) => {
     // Delete associated reviews first
     await Review.deleteMany({ movie: movieId });
-    
+
     const movie = await Movie.findByIdAndDelete(movieId);
     if (!movie) {
       throw new Error('Movie not found');
@@ -337,17 +337,17 @@ export const adminService = {
 
     // Build filter object
     const filter = {};
-    
+
     if (search) {
       filter.$or = [
         { comment: { $regex: search, $options: 'i' } }
       ];
     }
-    
+
     if (reported !== '') {
       filter.isReported = reported === 'true';
     }
-    
+
     if (rating) {
       filter.rating = parseInt(rating);
     }
@@ -356,7 +356,7 @@ export const adminService = {
     const reviews = await Review.find(filter)
       .populate('user', 'username email profilePic')
       .populate('movie', 'title year')
-      .populate('reportedBy.user', 'username email')
+      .populate('reportedBy.user', 'username email profilePic')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -367,7 +367,7 @@ export const adminService = {
     // Get statistics
     const totalReviews = await Review.countDocuments();
     const reportedReviews = await Review.countDocuments({ isReported: true });
-    
+
     // Get new reviews this month
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

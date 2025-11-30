@@ -16,11 +16,11 @@ export const reviewService = {
     }
 
     // Check if user already reviewed
-    const existingReview = await Review.findOne({ 
-      movie: movieId, 
-      user: userId 
+    const existingReview = await Review.findOne({
+      movie: movieId,
+      user: userId
     });
-    
+
     if (existingReview) {
       throw new Error('You have already reviewed this movie');
     }
@@ -40,7 +40,7 @@ export const reviewService = {
 
     // Populate review for response
     return await Review.findById(savedReview._id)
-      .populate('user', 'username email')
+      .populate('user', 'username email profilePic')
       .populate('movie', 'title');
   },
 
@@ -61,7 +61,7 @@ export const reviewService = {
     sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
 
     const reviews = await Review.find({ movie: movieId })
-      .populate('user', 'username email')
+      .populate('user', 'username email profilePic')
       .sort(sortOptions)
       .skip(skip)
       .limit(parseInt(limit));
@@ -89,10 +89,10 @@ export const reviewService = {
       throw new Error('Movie not found');
     }
 
-    const review = await Review.findOne({ 
-      movie: movieId, 
-      user: userId 
-    }).populate('user', 'username email');
+    const review = await Review.findOne({
+      movie: movieId,
+      user: userId
+    }).populate('user', 'username email profilePic');
 
     return review;
   },
@@ -127,7 +127,7 @@ export const reviewService = {
     await movie.updateRatingStats();
 
     return await Review.findById(reviewId)
-      .populate('user', 'username email')
+      .populate('user', 'username email profilePic')
       .populate('movie', 'title');
   },
 
@@ -170,17 +170,17 @@ export const reviewService = {
       // Unlike
       review.likes.splice(likeIndex, 1);
       await review.save();
-      return { 
+      return {
         liked: false,
-        likeCount: review.likes.length 
+        likeCount: review.likes.length
       };
     } else {
       // Like
       review.likes.push(userId);
       await review.save();
-      return { 
+      return {
         liked: true,
-        likeCount: review.likes.length 
+        likeCount: review.likes.length
       };
     }
   },
@@ -229,7 +229,7 @@ export const reviewService = {
     }
 
     // Check if user already reported this review
-    const existingReport = review.reportedBy.find(report => 
+    const existingReport = review.reportedBy.find(report =>
       report.user.toString() === userId.toString()
     );
 
