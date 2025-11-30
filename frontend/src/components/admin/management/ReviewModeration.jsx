@@ -45,7 +45,7 @@ export default function ReviewModeration() {
   };
 
   const { data: responseData, isLoading, error, refetch } = useAdminReviews(params);
-  
+
   // Extract data and pagination from response
   const data = responseData?.data || [];
   const pagination = responseData?.pagination || {};
@@ -301,7 +301,10 @@ export default function ReviewModeration() {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Avatar className="h-6 w-6">
-                              <AvatarImage src={review.user?.profilePic} />
+                              <AvatarImage
+                                src={review.user?.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.user?.username || 'User')}&background=random&color=fff&size=24`}
+                                alt={review.user?.username || "Unknown User"}
+                              />
                               <AvatarFallback>
                                 <IconUser className="h-3 w-3" />
                               </AvatarFallback>
@@ -454,7 +457,10 @@ export default function ReviewModeration() {
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <Avatar className="h-12 w-12 review-detail-avatar">
-                  <AvatarImage src={selectedReview.user?.profilePic} />
+                  <AvatarImage
+                    src={selectedReview.user?.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(selectedReview.user?.username || 'User')}&background=random&color=fff&size=48`}
+                    alt={selectedReview.user?.username || "Unknown User"}
+                  />
                   <AvatarFallback>
                     <IconUser className="h-6 w-6" />
                   </AvatarFallback>
@@ -466,7 +472,7 @@ export default function ReviewModeration() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="review-content-section">
                 <h4 className="font-medium mb-3 text-base">Movie</h4>
                 <p className="review-movie-title text-base">{selectedReview.movie?.title || "Unknown Movie"}</p>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { Avatar, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Star, Heart, MoreHorizontal, Edit, Trash2, Flag, AlertTriangle } from 'lucide-react';
 import { 
     DropdownMenu, 
@@ -58,6 +58,10 @@ const ReportDialog = ({ isOpen, onClose, review, onSubmit }) => {
                     <div className="p-4 bg-muted rounded-lg">
                         <div className="flex items-center gap-3 mb-2">
                             <Avatar className="h-8 w-8">
+                                <AvatarImage 
+                                    src={review?.user?.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(review?.user?.username || 'User')}&background=random&color=fff&size=32`} 
+                                    alt={review?.user?.username || "Unknown User"} 
+                                />
                                 <AvatarFallback>
                                     {review?.user?.username?.charAt(0).toUpperCase()}
                                 </AvatarFallback>
@@ -238,6 +242,10 @@ const ReviewCard = ({ review, onEdit, showMovie = false }) => {
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                         <Avatar className="w-10 h-10">
+                            <AvatarImage 
+                                src={review.user?.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.user?.username || 'User')}&background=random&color=fff&size=40`} 
+                                alt={review.user?.username || "Unknown User"} 
+                            />
                             <AvatarFallback>
                                 {review.user.username?.charAt(0).toUpperCase()}
                             </AvatarFallback>
